@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles</title>
+    <!-- STYLE -->
+    <link rel="stylesheet" href="./Bootstrap/bootstrap-4.3.1-dist/bootstrap-4.3.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./scss.css">
+    <!-- STYLE -->
+</head>
+<body>
+    <div class="cont">
+        <h1 class="display-3">Js Lexical scope:</h1>
+        <p class="disp-5">- Java script is a single threded language , which means is excutes in order , it is Synchronised for the most part but WEB APIS added some Asynchrinised parts to the language.
+            - every thred has it's own memory and call stack.
+            <span class="sub">call stack:</span> 
+            it is a set of functions that gets excuted , it also manages the excution context  and they are LIFO , at the very bottom of evry call stack , there is the global excution context , then out function stacked at top , it is actually a data structure
+            - how to represent call stack ? , basically it push the first function , excutes it then pop() it out , before pushing the next function.
+            <span class="sub">Excution context:</span>
+            it is an envirement to handle the transformation of the code and it conaines all the  currently excuting code and the varibles that are their to aid the excution
+            gloal excution context,function excution context.
+            - what are the EC phases?
+            <span class="sub hidden">Creation phase</span>
+            <span class="hidden">- creat the global object (window) in js.</span>
+            <span class="hidden">- creat the 'this' object and binds it to the global object</span>
+            <span class="hidden">- set up memory heap for storing vars and function reference</span>
+            <span class="hidden">- stor vars and functions in the global excution context and set them to => undefined</span>
+            <span class="sub hidden">excution phase</span>
+            <span class="hidden">- excute every line of code</span>
+            <span class="hidden">- creats a new EC for every function call</span>
+            - how does the EC work here? in steps
+        </p>
+
+        <div class="codeSnip bg-dark text-white lead px-3">
+        <code class="text-white ">var x = 100;
+                var y = 50;
+                ufnction getSum(n1,n2){
+                    var sum = n1 + n2;
+                    return sum;
+                }
+                var sum1 = getSum(x,y)
+                var sum2 = getSum(10,5)
+        </code>
+        </div>
+        <p class="disp-5">
+        <span class="sub">Creation phase:</span>
+        - Allocat memory for x , sets it to undefined.
+        - Allocat memory for y , sets it to undefined.
+        - get the function getSum() allocates memory and stores all the code inside
+        - sum1 , and sum2 , allocates memory for both and sets them to undefined.
+        <span class="sub">excution:</span>
+        - sets the value of x to 100
+        - sets the value of y to 50
+        - it skips the function def
+        - line 7 , it invoces the getSum() function and starts a new EC for the function:
+        - #{
+            <span class="sub">inside the EC of the function:</span>
+            <span class="sub">* creation phase:</span>
+            - allocate memory for both n1 and n2 , sets them to undefined.
+            - allocate memory for sum and set it to undefined.
+            <span class="sub">* excution phase:</span>
+            - n1 and n2 are assigned there values 
+            - the calculation is done and the result is assigned to the sum variable
+            - the return tells the function EC to return the value to the global EC 
+            - the returned value is assigned to the sum1
+        }
+        <span class="sub">Hoisting:</span>
+        - it means that the inrepreter moves function declarations and variables declarations up to the top if their scop
+        - when you console log var a = 5; before declaration you get unddefined , why?
+        <span class="hidden">because the var is being declared , set to undefined (during the creation phase)</span>
+        - what is the diffrence between var and let/const?
+        <span class="hidden">let/const are block scoped , so if i tried to log it before their declaration , i'll get a refrence error , this doesn't mean that they are not hoisted , they are but they have their own special scop called "script" kind of a dead zone before it gets its values</span>
+        <span class="sub">What is the lexical envirment of somthing?</span>
+        <span class="hidden">it is a combination of the local memory of a function (idk) and it's lexical father (container) , tougther they make the lexical envirment</span>
+        - What is shadowing? <span class="hidden">when an identifier with the same name gets used instead of the outher one because of scoping rules</span>
+        - window.a
+        This technique gives access to a global variable that would otherwise be inaccessible
+        due to it being shadowed. However, non-global shadowed variables cannot be accessed
+        - it does not matter where/how a function was invoked , its lexical scope depends on where it was declared
+    </p>
+    <div class="codeSnip bg-dark text-white lead px-3">
+        <code class="text-white ">var obj = {
+            a: 1,
+            b: 2,
+            c: 3
+            };// more "tedious" to repeat "obj"
+            obj.a = 2;
+            obj.b = 3;
+            obj.c = 4;// "easier" short-hand
+            with (obj) {
+            a = 3;
+            b = 4;
+            c = 5;
+            }
+        </code>
+        </div>
+        <p class="disp-5">
+            <span class="sub">Lexing phase:</span>
+            <span class="hidden">- is basically knowing how and where all the identifiers were declared</span>
+            - how many scope types are out there? 
+            * there is function scopes , each function creats a scope for itself.
+            * a function is considered to be an identefier that belogns to its outer scope.
+            * You can basically hide variales buy contianing them in a functions
+            * The principle of least privelige in softwar desogn means exposing the minimal necceceary values , and hide evrything else.
+        </p>
+        <div class="codeSnip bg-dark text-white lead px-3">
+            <code class="text-white ">function doSomething(a) {
+                b = a + doSomethingElse( a * 2 );
+                console.log( b * 3 );
+                }
+                function doSomethingElse(a) {
+                return a - 1;
+                }
+                var b;
+                doSomething( 2 );
+                // 15
+            </code>
+            </div>
+    <p class="disp-5">
+        - in this case , the function doSomethingElse() is likely "private" details of how the doSomething does its job
+        - a more proper design thi , is putting the doSomethingElse() declaration inside the doSomething declaraton, so they are not accesible for any outside influence or use. 
+    </p>
+    <div class="codeSnip bg-dark text-white lead px-3">
+        <code class="text-white "> function foo() {
+            function bar(a) {
+            i = 3;
+            // changing the `i` in the enclosing scope's
+            // for-loop
+            console.log( a + i );
+            }
+            for (var i=0; i<= 10; i++) {
+              bar( i * 2 );
+              // oops, inifinite loop ahead!
+              }
+              }
+              foo();
+        </code>
+        </div>
+        <p class="disp-5">
+            - Why does this make an infinit loop? the value of i is being reset to 3 everytime the bar() excutes , meaning it will never get to 10
+            - libaries often avoid var name collition by delevring one object that has a very unique name and you then acces the whole libary throught it.
+            <span class="sub">Module:</span>
+            - WHat are dependency managers?
+            * apparantly they rae devided to 4 things:
+            - package managers (npm , yarn)
+            - Task runner (Gulp) althought , they are not dependancies
+            - Module loaders (Browsify)
+            - Static module bundler (webpack)
+            *how is this relateed to front-end only?*
+            - Anyways the dependencies could be : a module is just a js file with code in it. (also a piece of the app with some specific job)
+            JS has to main module systems are CJS ESM , these are ways to import/export JS modules , best one is ESM , more <a href="http://dev.to/iggredible/what-the-heck-are-cjs-amd-umd-and-esm-ikm">here</a>
+            - a libary is a set of modules that tougther provide some feuture
+            - a pakage is a downlodable version of the libary , also contain some files that are non related to the functions itself but to ensure it works properly togther (like babel for react).
+            *should add here discord answers as well*
+            - how to avoid collision  ?
+            <span class="hidden"> dependencies mangers make sure that each module has it's own scope.</span>
+            - how tell between a function declaration and a function expression?
+            <span class="hidden">if the function keyword was the first word to be typed it will be a declaration</span>
+            - using IIFI actually hides the function name from the global scope.
+            -function expressiong can have no name in oppose of the declarations.
+            - what are the drawbacks of using anonymous functions?
+            * <span class="hidden">they have no name to display in the call stack making debugging hard</span>   
+        </p>
+        <div class="codeSnip bg-dark text-white lead px-3">
+            <code class="text-white ">var a = 2;
+(function IIFE( global ){
+var a = 3;
+console.log( a );
+// 3
+console.log( global.a );
+// 2
+})( window );
+console.log( a );
+// 2
+            </code>
+            </div>
+            <p class="disp-5"><span class="sub">explicit block scoping:</span>
+                - to creat an explicit block scope you need to wrap your code inside { .. }
+                - if you made some operations in the global scope , and even after they are done its possible that they are still in the memory because they still in the scope of clauser for the functions , to solve this we block scope them using { .. }
+                - 
+            </p>
+
+</div>
+
+     
+    <!-- SCRIPT -->
+    <script src="./script.js"></script>
+    <!-- SCRIPT -->
+</body>
+</html>

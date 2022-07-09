@@ -1,0 +1,37 @@
+* {
+  white-space: pre-line;
+}
+
+.cont {
+  width: 80%;
+  margin: auto;
+}
+
+.cont h1 {
+  text-decoration: underline;
+}
+
+.cont p {
+  white-space: pre-line;
+}
+
+.disp-5 {
+  font-size: 2rem;
+}
+
+.sub {
+  background: lightpink;
+  font-size: 2rem;
+  text-decoration: underline;
+}
+
+span {
+  cursor: pointer;
+}
+
+.hidden {
+  cursor: pointer;
+  color: transparent;
+  text-shadow: 0 0 11px #000;
+}
+/*# sourceMappingURL=scss.css.map */
